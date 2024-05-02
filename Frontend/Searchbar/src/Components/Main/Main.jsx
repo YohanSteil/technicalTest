@@ -10,7 +10,7 @@ const Main = () => {
   useEffect(() => {
     const fetchTests = async (lang, token) => {
         try {
-          const response = await axios.get(`http://localhost:3000/api/en/test/`, {
+          const response = await axios.get(`http://localhost:3000/api/fr/test/`, {
             headers: {
               Authorization: token
             }
@@ -53,10 +53,6 @@ const Main = () => {
     fetchToken();
   }, []);
 
-  const toggleCard = () => {
-    setIsCardOpen(!isCardOpen);
-  };
-
 
 
   // Afficher le token une fois qu'il est récupéré
@@ -66,41 +62,47 @@ const Main = () => {
       <p>{token}</p>
       <h3>Résultats des tests : </h3>
       <ul>
-        {tests.map(test => (
+        {/* {tests.map(test => (
           <li key={test.id}>
             <p>Ref: {test.ref}</p>
             <p>Title: {test.title}</p>
             <p>Sub Title: {test.sub_title}</p>
             <p>Color: {test.color}</p>
           </li>
-        ))}
+        ))} */}
       </ul>
     </div>
-    <div className="card">
-    <header className="card-header">
-      <p className="card-header-title">Component</p>
-      <button className="card-header-icon" aria-label="more options" onClick={toggleCard}>
-        <span className="icon">
-        <i className={`fas fa-angle-${isCardOpen ? 'up' : 'down'}`} aria-hidden="false"></i>
-        </span>
-      </button>
-    </header>
-    {isCardOpen && (
-      <div className="card-content">
-        <div className="content">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec
-          iaculis mauris.
-          <br />
-          <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
+    <div className="test is-flex is-flex-direction-row is-flex-wrap-wrap">
+  {tests.map((test, index) => (
+    <div className='card' style={{ backgroundColor: test.color }} key={index}>
+
+      <header className="card-header">
+        <h2 className="card-header-title is-justify-content-center " style={{color: 'white', fontSize: '1.5rem'}}>{test.title}</h2>
+        {/* <button className="card-header-icon" aria-label="more options" onClick={toggleCard}>
+          <span className="icon">
+            <i className={`fas fa-angle-${isCardOpen ? 'up' : 'down'}`} aria-hidden="false"></i>
+          </span>
+        </button> */}
+      </header>
+     
+        <div className="card-content">
+          <div className="content " style={{color: 'white', fontSize: '1.1rem'}}>
+            <ul>
+              <li>{test.sub_title}</li>
+            </ul>
+            <br />
+            
+          </div>
         </div>
-      </div>
-    )}
-    <footer className="card-footer">
-      <a href="#" className="card-footer-item">Save</a>
-      <a href="#" className="card-footer-item">Edit</a>
-      <a href="#" className="card-footer-item">Delete</a>
-    </footer>
-  </div>
+      <footer className="card-footer">
+        <a href="#" className="card-footer-item" style={{color: 'white', fontSize: '1rem'}}>Save</a>
+        <a href="#" className="card-footer-item" style={{color: 'white', fontSize: '1rem'}}>Edit</a>
+        <a href="#" className="card-footer-item" style={{color: 'white', fontSize: '1rem'}}>Delete</a>
+      </footer>
+    </div>
+  ))}
+</div>
+
   </>   
   );
 };
