@@ -7,9 +7,9 @@ import Main from './Components/Main/Main';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
+  <>
     <Header/>
     <SearchBar/>
     <Main/>
-  </React.StrictMode>
+  </>
 );

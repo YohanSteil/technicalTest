@@ -1,0 +1,38 @@
+.main{
+    &__title{
+        text-align: center;
+        font-size: 2rem;
+        font-weight: 600;
+        color: black;
+        padding: 2rem 0;
+        text-decoration: underline;
+    }
+}
+
+.test{
+    /* display: flex;
+    flex-direction: row;
+    flex-wrap: wrap; */
+    width: 100%;
+    gap: 2rem;
+}
+
+.card{
+    display: flex;
+    flex-direction: column;
+    width: 30%;
+}
+
+.pagination{
+    margin-top: 2rem ;
+    border-top: 1px solid lightgray;
+    padding: 2rem;
+    display: flex;
+    justify-content: space-evenly;
+
+    &__number{
+        font-size: 1.5rem;
+        color: black;
+        font-weight: bold;
+    }
+}
