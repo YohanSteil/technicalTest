@@ -2,6 +2,7 @@ import express from 'express';
 import sqlite3Package from 'sqlite3';
 import bodyParser from 'body-parser';
 import chalk from 'chalk';
+import cors from 'cors'
 
 import dotenv from 'dotenv';
 dotenv.config();
@@ -17,6 +18,7 @@ const db = new sqlite3.Database('./deepsy_test.db', (err) => {
 
 const app = express();
 app.use(bodyParser.json());
+app.use(cors());
 
 const TOKEN = "OpgIe84krMsrMouJrUdxYPghX5o7DKtTiL1alv6vbgg6zuUpUbt0xDUMiLBgY5bw";
 const languages = ["en", "fr"];
