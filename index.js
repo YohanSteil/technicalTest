@@ -4,8 +4,8 @@ import bodyParser from 'body-parser';
 import chalk from 'chalk';
 import cors from 'cors'
 
-import dotenv from 'dotenv';
-dotenv.config();
+// import dotenv from 'dotenv';
+// dotenv.config();
 
 const { verbose } = sqlite3Package;
 const sqlite3 = verbose();

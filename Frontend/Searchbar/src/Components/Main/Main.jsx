@@ -8,11 +8,12 @@ const Main = () => {
   const [selectedLanguage, setSelectedLanguage] = useState('fr');
   const [page, setPage] = useState(1); // État pour stocker le numéro de la page actuelle
   const [limit, setLimit] = useState(9); // État pour stocker la limite d'éléments par page
+  axios.defaults.baseURL = 'http://localhost:3000/'
 
   useEffect(() => {
     const fetchTests = async (lang, token, page, limit) => {
         try {
-          const response = await axios.get(`http://localhost:3000/api/${lang}/test/?page=${page}&limit=${limit}&sort=date`, {
+          const response = await axios.get(`api/${lang}/test/?page=${page}&limit=${limit}&sort=date`, {
             headers: {
               Authorization: token
             }
@@ -34,7 +35,7 @@ const Main = () => {
     const fetchToken = async () => {
       try {
         // Effectuer une requête GET pour obtenir le token
-        const response = await axios.get('http://localhost:3000/token');
+        const response = await axios.get('token');
         console.log(response.data.token);
         
         // Vérifier si la requête a réussi
