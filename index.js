@@ -54,7 +54,7 @@ app.get('/languages', (req, res) => {
 });
 
 const randomErrorMiddleware = (req, res, next) => {
-    if (Math.random() < 0.1) return res.status(500).send("Oopsie doopsie, something totally went wrong, no idea what 🥸");
+    // if (Math.random() < 0.1) return res.status(500).send("Oopsie doopsie, something totally went wrong, no idea what 🥸");
 
     next();
 };
@@ -121,7 +121,7 @@ app.get('/api/:lang/test/:id', (req, res) => {
 
 app.post('/api/:lang/test/', (req, res) => {
     // One in a three chance of the request failing (Wanted half of these to fail but there's already 1 in a 10 chance of it failing).
-    if (Math.random() < 0.33) return res.status(500).send("Oopsie doopsie, something totally went wrong, no idea what 🥸");
+    // if (Math.random() < 0.33) return res.status(500).send("Oopsie doopsie, something totally went wrong, no idea what 🥸");
 
     const { title, sub_title, color, is_active } = req.body;
 

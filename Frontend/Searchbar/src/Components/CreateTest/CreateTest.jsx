@@ -1,13 +1,21 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './CreateTest.scss';
+    axios.defaults.baseURL = 'http://localhost:3000/'
+
+
 
 const CreateTest = () => {
-    
     const [isModalActive, setIsModalActive] = useState(false);
     const [formData, setFormData] = useState({
-        title: '',
-        sub_title: '',
+        title: {
+            en: '',
+            fr: '',
+        },
+        sub_title: {
+            en: '',
+            fr: '',
+        },
         color: '',
         is_active: '',
     });
@@ -43,7 +51,7 @@ const CreateTest = () => {
         }
     };
 
-    const handleSubmit = async () => {
+    const handleSubmit = async (lang) => {
         try {
             // Attendre la réponse de fetchToken
             const tokenResponse = await fetchToken();
@@ -52,16 +60,22 @@ const CreateTest = () => {
             const token = tokenResponse.data.token;
             console.log(token);
 
-            const testData = {
-                title: formData.title,
-                sub_title: formData.sub_title,
-                color: formData.color,
-                is_active: formData.is_active
-            };
+           const testData = {
+            title: {
+                en: formData.title,  // Titre en anglais
+                fr: formData.title   // Titre en français (même que l'anglais dans cet exemple)
+            },
+            sub_title: {
+                en: formData.sub_title,  // Sous-titre en anglais
+                fr: formData.sub_title   // Sous-titre en français (même que l'anglais dans cet exemple)
+            },
+            color: formData.color,
+            is_active: formData.is_active
+        };
 
 
             const response = await axios.post(
-                'api/fr/test/',
+                `api/en/test/`,
                 testData,
                 {
                     headers: {
@@ -80,6 +94,7 @@ const CreateTest = () => {
                 is_active: '',
             });
             handleCloseModal();
+
         } catch (error) {
             console.error('Erreur lors de l\'envoi des données :', error);
         }
@@ -95,13 +110,13 @@ const CreateTest = () => {
                     {/* <input className="input" type="text" placeholder="ref" name='ref'  value={formData.ref}
     onChange={handleChange} /> */}
     <h2 style={{color:'white', fontSize:'2rem'}}>Titre</h2>
-                    <input className="input" type="text" placeholder="Title english" name='title'  value={formData.title}
+                    <input className="input" type="text" placeholder="Title english" name='title'  value={formData.title.en}
     onChange={handleChange}/>
-    <input className="input" type="text" placeholder="Title french" name='title'  value={formData.title}
+    <input className="input" type="text" placeholder="Title french" name='title'  value={formData.title.en}
     onChange={handleChange}/>
-                    <input className="input" type="text" placeholder="sub_title english" name='sub_title'  value={formData.sub_title}
+                    <input className="input" type="text" placeholder="sub_title english" name='sub_title'  value={formData.sub_title.en}
     onChange={handleChange} />
-    <input className="input" type="text" placeholder="sub_title french" name='sub_title'  value={formData.sub_title}
+    <input className="input" type="text" placeholder="sub_title french" name='sub_title'  value={formData.sub_title.fr}
     onChange={handleChange} />
                     <input className="input" type="text" placeholder="is_active" name='is_active'  value={formData.is_active}
     onChange={handleChange}/>

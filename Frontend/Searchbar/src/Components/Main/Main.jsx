@@ -61,11 +61,35 @@ const handleLanguageChange = (event) => {
   setSelectedLanguage(event.target.value); // Update the selected language based on user selection
 }
 
+
 const handlePageChange = (newPage) => {
   if (newPage > 0) { // Vérification pour éviter que la pagination descende en dessous de 1
     setPage(newPage);
   }
 };
+
+const handleUpdate = (id) => {
+  // Ici, vous pouvez effectuer une action de mise à jour, comme afficher un formulaire de modification
+  console.log('Modifier le test avec l\'ID :', id);
+};
+
+const handleDelete  = async (lang, id) => {
+  try {
+    const response = await axios.delete(`api/${lang}/test/${id}`, {
+      headers: {
+        Authorization: token
+      }
+    });
+
+    setTests(tests.filter(test => test.id !== id));
+    
+  console.log(response);
+  } catch (error) {
+    console.error('Error fetching tests:', error);
+    // Gérer les erreurs ici
+  }
+};
+
 
 
   // Afficher le token une fois qu'il est récupéré
@@ -97,11 +121,13 @@ const handlePageChange = (newPage) => {
                 </ul>
               </div>
             </div>
+
+            
   
             <footer className="card-footer">
-              <a href="#" className="card-footer-item" style={{ color: 'white', fontSize: '1rem' }}>Save</a>
-              <a href="#" className="card-footer-item" style={{ color: 'white', fontSize: '1rem' }}>Edit</a>
-              <a href="#" className="card-footer-item" style={{ color: 'white', fontSize: '1rem' }}>Delete</a>
+            <a href="#" className="card-footer-item" style={{ color: 'white', fontSize: '1rem' }} onClick={() => handleUpdate(test.id)}>Modifier</a>
+
+              <a href="#" className="card-footer-item" style={{ color: 'white', fontSize: '1rem' }} onClick={() => handleDelete(selectedLanguage, test.id)}>Supprimer</a>
             </footer>
           </div>
         ))}
