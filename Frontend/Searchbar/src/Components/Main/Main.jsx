@@ -76,6 +76,7 @@ const handleUpdate = (id) => {
   console.log('Modifier le test avec l\'ID :', id);
   setSelectedTestId(id); // Stocker l'ID du test sélectionné
   setIsModalOpen(true);
+  console.log(isModalOpen);
 };
 
 const handleDelete  = async (lang, id) => {
@@ -94,6 +95,12 @@ const handleDelete  = async (lang, id) => {
     // Gérer les erreurs ici
   }
 };
+
+const handleCloseModal = () => {
+  setIsModalOpen(false);
+};
+
+
 
 
 

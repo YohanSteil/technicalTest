@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 axios.defaults.baseURL = 'http://localhost:3000/'
 
-const ModalContent = ({ handleCloseModal, testId }) => {
+const ModalContent = ({ testId, handleCloseModal }) => {
     const [formData, setFormData] = useState({
         title_en: '',
         title_fr: '',
@@ -36,6 +36,7 @@ const ModalContent = ({ handleCloseModal, testId }) => {
         setFormData({ ...formData, [name]: value });
     };
 
+
     const handleSubmit = async () => {
         try {
              // Attendre la réponse de fetchToken
@@ -66,7 +67,16 @@ const ModalContent = ({ handleCloseModal, testId }) => {
                 }
             }) 
             console.log(response);
-
+             // Réinitialiser le formulaire après l'envoi des données si nécessaire
+            setFormData({
+                title_en: '',
+        title_fr: '',
+        sub_title_en: '',
+        sub_title_fr: '',
+        color: '',
+        is_active: '',
+            });
+            handleCloseModal();
             
         } catch (error) {
             console.error('Erreur lors de l\'envoi des données :', error);
@@ -74,7 +84,7 @@ const ModalContent = ({ handleCloseModal, testId }) => {
     };
 
     return (
-        <div className='modal is-active'>
+        <div className={`modal is-active`}>
             <div className="modal-background" onClick={handleCloseModal}></div>
             <div className="modal-content">
                 <h1 className='modal-content__title'>Modification d'un test</h1>

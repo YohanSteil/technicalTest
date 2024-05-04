@@ -8,14 +8,10 @@ import './CreateTest.scss';
 const CreateTest = () => {
     const [isModalActive, setIsModalActive] = useState(false);
     const [formData, setFormData] = useState({
-        title: {
-            en: '',
-            fr: '',
-        },
-        sub_title: {
-            en: '',
-            fr: '',
-        },
+        title_en: '',
+        title_fr: '',
+        sub_title_en: '',
+        sub_title_fr: '',
         color: '',
         is_active: '',
     });
@@ -62,12 +58,12 @@ const CreateTest = () => {
 
            const testData = {
             title: {
-                en: formData.title,  // Titre en anglais
-                fr: formData.title   // Titre en français (même que l'anglais dans cet exemple)
+                en: formData.title_en,
+                fr: formData.title_fr
             },
             sub_title: {
-                en: formData.sub_title,  // Sous-titre en anglais
-                fr: formData.sub_title   // Sous-titre en français (même que l'anglais dans cet exemple)
+                en: formData.sub_title_en,
+                fr: formData.sub_title_fr
             },
             color: formData.color,
             is_active: formData.is_active
@@ -88,10 +84,12 @@ const CreateTest = () => {
             console.log(response); // Afficher la réponse du serveur
             // Réinitialiser le formulaire après l'envoi des données si nécessaire
             setFormData({
-                title: '',
-                sub_title: '',
-                color: '',
-                is_active: '',
+                title_en: '',
+        title_fr: '',
+        sub_title_en: '',
+        sub_title_fr: '',
+        color: '',
+        is_active: '',
             });
             handleCloseModal();
 
@@ -110,13 +108,13 @@ const CreateTest = () => {
                     {/* <input className="input" type="text" placeholder="ref" name='ref'  value={formData.ref}
     onChange={handleChange} /> */}
     <h2 style={{color:'white', fontSize:'2rem'}}>Titre</h2>
-                    <input className="input" type="text" placeholder="Title english" name='title'  value={formData.title.en}
+                    <input className="input" type="text" placeholder="Title english" name='title_en'  value={formData.title_en}
     onChange={handleChange}/>
-    <input className="input" type="text" placeholder="Title french" name='title'  value={formData.title.en}
+    <input className="input" type="text" placeholder="Title french" name='title_fr'  value={formData.title_fr}
     onChange={handleChange}/>
-                    <input className="input" type="text" placeholder="sub_title english" name='sub_title'  value={formData.sub_title.en}
+                    <input className="input" type="text" placeholder="sub_title english" name='sub_title_en'  value={formData.sub_title_en}
     onChange={handleChange} />
-    <input className="input" type="text" placeholder="sub_title french" name='sub_title'  value={formData.sub_title.fr}
+    <input className="input" type="text" placeholder="sub_title french" name='sub_title_fr'  value={formData.sub_title_fr}
     onChange={handleChange} />
                     <input className="input" type="text" placeholder="is_active" name='is_active'  value={formData.is_active}
     onChange={handleChange}/>
