@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Main.scss'
+import ModalContent from '../modalContent/modalContentUpdate';
 
 const Main = () => {
   const [token, setToken] = useState('');
@@ -8,6 +9,8 @@ const Main = () => {
   const [selectedLanguage, setSelectedLanguage] = useState('fr');
   const [page, setPage] = useState(1); // État pour stocker le numéro de la page actuelle
   const [limit, setLimit] = useState(9); // État pour stocker la limite d'éléments par page
+  const [isModalOpen, setIsModalOpen] = useState(false); // État pour contrôler la visibilité de la modal
+  const [selectedTestId, setSelectedTestId] = useState(null); // Stocker l'ID du test sélectionné
   axios.defaults.baseURL = 'http://localhost:3000/'
 
   useEffect(() => {
@@ -71,6 +74,8 @@ const handlePageChange = (newPage) => {
 const handleUpdate = (id) => {
   // Ici, vous pouvez effectuer une action de mise à jour, comme afficher un formulaire de modification
   console.log('Modifier le test avec l\'ID :', id);
+  setSelectedTestId(id); // Stocker l'ID du test sélectionné
+  setIsModalOpen(true);
 };
 
 const handleDelete  = async (lang, id) => {
@@ -98,7 +103,7 @@ const handleDelete  = async (lang, id) => {
     <div className='main'> 
           <h2>Choississez votre langue:</h2>
 
-<div class="select is-rounded">
+<div className="select is-rounded">
 <select onChange={handleLanguageChange} value={selectedLanguage}>
 <option value={"fr"}>Français</option>
 <option value={"en"}>Anglais</option>
@@ -137,6 +142,7 @@ const handleDelete  = async (lang, id) => {
         <span className='pagination__number'>{page}</span>
         <button onClick={() => handlePageChange(page + 1)} className='button'>Next</button>
       </div>
+      {isModalOpen && <ModalContent handleCloseModal={() => setIsModalOpen(false)} testId={selectedTestId} />} 
     </div>   
   );
   
