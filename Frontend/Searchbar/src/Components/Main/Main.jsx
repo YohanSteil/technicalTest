@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Link} from 'react';
+// import {useNavigate} from 'react-router-dom'
 import axios from 'axios';
 import './Main.scss'
 import ModalContent from '../modalContent/modalContentUpdate';
 
 const Main = () => {
+  // const navigate = useNavigate();
   const [token, setToken] = useState('');
   const [tests, setTests] = useState([]);
   const [selectedLanguage, setSelectedLanguage] = useState('fr');
@@ -11,6 +13,11 @@ const Main = () => {
   const [limit, setLimit] = useState(9); // État pour stocker la limite d'éléments par page
   const [isModalOpen, setIsModalOpen] = useState(false); // État pour contrôler la visibilité de la modal
   const [selectedTestId, setSelectedTestId] = useState(null); // Stocker l'ID du test sélectionné
+
+  const [searchColor, setSearchColor] = useState(''); // État pour stocker la couleur de recherche
+  const [filteredTests, setFilteredTests] = useState([]);
+  const [searchTitle, setSearchTitle] = useState('');
+  const [searchSubTitle, setSearchSubTitle] = useState('');
   axios.defaults.baseURL = 'http://localhost:3000/'
 
   useEffect(() => {
@@ -59,6 +66,50 @@ const Main = () => {
     fetchToken();
   }, [selectedLanguage, page, limit]);
 
+  // Fonction pour filtrer les tests en fonction de la couleur saisie
+  const filterTests = () => {
+    // Si la couleur saisie est vide, afficher tous les tests
+    if (!searchColor) {
+      setFilteredTests(tests);
+    } else {
+      // Filtrer les tests en fonction de la couleur saisie
+      const filtered = tests.filter(test => test.color === searchColor);
+      setFilteredTests(filtered);
+    }
+  };
+
+  const filterTestsByTitle = () => {
+    if (!searchTitle) {
+      setFilteredTests(tests);
+    } else {
+      const filteredTitle = tests.filter(test => test.title.toLowerCase().startsWith(searchTitle.toLowerCase()));
+      setFilteredTests(filteredTitle);
+    }
+  };
+
+  const filterTestsBySubtitle = () => {
+    if(!searchSubTitle) {
+      setFilteredTests(tests); 
+    } else {
+      const filteredSubTitle = tests.filter(test => test.sub_title.toLowerCase().startsWith(searchSubTitle.toLowerCase()))
+      setFilteredTests(filteredSubTitle)
+    }
+  }
+  
+
+  useEffect(() => {
+    filterTests();
+  }, [searchColor, tests]);
+
+  useEffect(() => {
+    filterTestsByTitle(); 
+  }, [searchTitle, tests])
+
+  useEffect(() => {
+    filterTestsBySubtitle();
+  }, [searchSubTitle, tests])
+
+
 
 const handleLanguageChange = (event) => {
   setSelectedLanguage(event.target.value); // Update the selected language based on user selection
@@ -96,6 +147,31 @@ const handleDelete  = async (lang, id) => {
   }
 };
 
+const handleColorChange = (event) => {
+  setSearchColor(event.target.value);
+};
+
+const handleTitleChange = (event) => {
+  setSearchTitle(event.target.value);
+};
+
+const handleSubTitleChange = (event) => {
+  setSearchSubTitle(event.target.value)
+}
+
+const handleSearch = () => {
+  // Vérifier si la couleur saisie est valide (par exemple, une chaîne hexadécimale)
+  if (/^#[0-9A-F]{6}$/i.test(searchColor)) {
+
+  } else {
+    // Couleur invalide, ne pas effectuer de recherche
+    // Vous pouvez afficher un message d'erreur ou ignorer la recherche
+    console.log("Couleur saisie invalide");
+  }
+};
+
+
+
   return (
 
     <div className='main'> 
@@ -107,16 +183,34 @@ const handleDelete  = async (lang, id) => {
 <option value={"en"}>Anglais</option>
 </select>
 </div>
+      </div>
+      
+      <div className='search-bar'>
+        <div className='search-bar__title'>
+    <h2>Barre de recherche</h2>
+        </div>
+        <div className='search-bar__research'>
+    <div className="search-bar__research__color">
+  <input type="text" placeholder="Rechercher par couleur..." value={searchColor} onChange={handleColorChange} />
+</div>
 
+<div className="search-bar__research__title">
+  <input type="text" placeholder="Rechercher par titre..." value={searchTitle} onChange={handleTitleChange} />
+</div>  
+
+<div className="search-bar__research__subTitle">
+  <input type="text" placeholder="Rechercher par sous-titre..." value={searchSubTitle} onChange={handleSubTitleChange} />
+          </div>
+          </div>
     </div>
           
       <h3 className='main__result'>Résultats des tests :</h3>
   
-      <div className="test is-flex is-flex-direction-row is-flex-wrap-wrap">
-        {tests.map((test, index) => (
+      <div className="test">
+        {filteredTests.map((test, index) => (
           <div className='card' style={{ backgroundColor: test.color }} key={index}>
   
-            <header className="card-header">
+ <header className="card-header">
               <h2 className="card-header-title is-justify-content-center" style={{ color: 'white', fontSize: '1.5rem' }}>{test.title}</h2>
             </header>
            
