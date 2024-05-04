@@ -1,5 +1,16 @@
 .main{
+    
+    &__language{
+        width: 50%;
+        margin-top: -4.5rem;
+        border-right: 1px solid lightgray;
+        padding-right: 10rem;
+    }
     &__title{
+        font-size: 1.5rem;
+        text-align: center;
+    }
+    &__result{
         text-align: center;
         font-size: 2rem;
         font-weight: 600;
@@ -7,6 +18,11 @@
         padding: 2rem 0;
         text-decoration: underline;
     }
+}
+
+.select.is-rounded{
+    margin-left: 12rem;
+    margin-top: 1rem;
 }
 
 .test{

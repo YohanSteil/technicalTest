@@ -99,8 +99,8 @@ const CreateTest = () => {
     };
 
     return (
-        <div className='test'>
-            <button onClick={handleOpenModal}><h2>Crée un nouveau test</h2></button>
+        <div className='createTest'>
+            <button onClick={handleOpenModal} className='createTest__button'>Créer un nouveau test</button>
             <div className={`modal ${isModalActive ? 'is-active' : ''}`}>
                 <div className="modal-background"></div>
                 <div className="modal-content">

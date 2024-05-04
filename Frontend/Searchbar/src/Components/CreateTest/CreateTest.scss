@@ -1,6 +1,31 @@
-.test{
-    width: 100%;
+.createTest{
+    width: 30%;
+    padding-top: 2rem;
+    display: flex;
+    justify-content: space-around;
+    margin-left: 60rem;
+
+
+
+    &__button{
+        padding: 0.7rem;
+        font-size: 1.5rem;
+        border: 1px solid grey;
+        border-radius: 1rem;
+        transition: 0.2 ease-in-out;
+    }
+
+    &__button:hover{
+        padding: 0.7rem;
+        font-size: 1.5rem;
+        border: 1px solid grey;
+        border-radius: 1rem;
+        background-color: grey;
+        color: white;
+    }
+
 }
+
 
 .modal is-active{
     display: flex;

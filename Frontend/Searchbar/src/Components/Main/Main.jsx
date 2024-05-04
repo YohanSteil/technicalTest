@@ -96,27 +96,21 @@ const handleDelete  = async (lang, id) => {
   }
 };
 
-const handleCloseModal = () => {
-  setIsModalOpen(false);
-};
-
-
-
-
-
-  // Afficher le token une fois qu'il est récupéré
   return (
 
     <div className='main'> 
-          <h2>Choississez votre langue:</h2>
-
-<div className="select is-rounded">
+    <div className='main__language'>
+    <h2 className='main__title'>Choississez votre langue:</h2>
+          <div className="select is-rounded">
 <select onChange={handleLanguageChange} value={selectedLanguage}>
 <option value={"fr"}>Français</option>
 <option value={"en"}>Anglais</option>
 </select>
 </div>
-      <h3 className='main__title'>Résultats des tests :</h3>
+
+    </div>
+          
+      <h3 className='main__result'>Résultats des tests :</h3>
   
       <div className="test is-flex is-flex-direction-row is-flex-wrap-wrap">
         {tests.map((test, index) => (
