@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import toast from "react-hot-toast";
 import "./Main.scss";
 import ModalContent from "../modalContent/modalContentUpdate";
 
@@ -7,15 +8,41 @@ const Main = () => {
   const [token, setToken] = useState("");
   const [tests, setTests] = useState([]);
   const [selectedLanguage, setSelectedLanguage] = useState("fr");
-  const [page, setPage] = useState(1); // État pour stocker le numéro de la page actuelle
-  const [limit, setLimit] = useState(9); // État pour stocker la limite d'éléments par page
-  const [isModalOpen, setIsModalOpen] = useState(false); // État pour contrôler la visibilité de la modal
-  const [selectedTestId, setSelectedTestId] = useState(null); // Stocker l'ID du test sélectionné
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(9);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedTestId, setSelectedTestId] = useState(null);
   const [filteredTests, setFilteredTests] = useState([]);
-  const [searchColor, setSearchColor] = useState(""); // État pour stocker la couleur de recherche
+  const [searchColor, setSearchColor] = useState("");
   const [searchTitle, setSearchTitle] = useState("");
   const [searchSubTitle, setSearchSubTitle] = useState("");
+  const [numTestsPerPage, setNumTestsPerPage] = useState(9);
   axios.defaults.baseURL = "http://localhost:3000/";
+
+  const filterTests = () => {
+    let filteredTests = tests.filter((test) => {
+      if (
+        searchColor &&
+        test.color.toLowerCase() !== searchColor.toLowerCase()
+      ) {
+        return false;
+      }
+      if (
+        searchTitle &&
+        !test.title.toLowerCase().startsWith(searchTitle.toLowerCase())
+      ) {
+        return false;
+      }
+      if (
+        searchSubTitle &&
+        !test.sub_title.toLowerCase().startsWith(searchSubTitle.toLowerCase())
+      ) {
+        return false;
+      }
+      return true;
+    });
+    setFilteredTests(filteredTests);
+  };
 
   useEffect(() => {
     const fetchTests = async (lang, token, page, limit) => {
@@ -28,7 +55,6 @@ const Main = () => {
             },
           }
         );
-
         if (response.status === 200) {
           setTests(response.data.data);
         } else {
@@ -41,71 +67,24 @@ const Main = () => {
 
     const fetchToken = async () => {
       try {
-        // requête GET pour obtenir le token
         const response = await axios.get("token");
-
-        // Vérifier si la requête a réussi
         if (response.status !== 200) {
           throw new Error("Failed to fetch token");
         }
-
-        // Mettre à jour l'état du token avec le token reçu
         setToken(response.data.token);
         fetchTests(selectedLanguage, response.data.token, page, limit);
       } catch (error) {
         console.error("Error fetching token:", error);
-        // Gérer les erreurs ici
       }
     };
 
     fetchToken();
   }, [selectedLanguage, page, limit]);
 
-  // Fonction pour filtrer les tests en fonction de la couleur saisie
-  const filterTests = () => {
-    // Si couleur saisie vide -> afficher tous les tests
-    if (!searchColor) {
-      setFilteredTests(tests);
-    } else {
-      // Filtre tests en fonction de la couleur saisie
-      const filtered = tests.filter((test) => test.color === searchColor);
-      setFilteredTests(filtered);
-    }
-  };
-
-  const filterTestsByTitle = () => {
-    if (!searchTitle) {
-      setFilteredTests(tests);
-    } else {
-      const filteredTitle = tests.filter((test) =>
-        test.title.toLowerCase().startsWith(searchTitle.toLowerCase())
-      );
-      setFilteredTests(filteredTitle);
-    }
-  };
-
-  const filterTestsBySubtitle = () => {
-    if (!searchSubTitle) {
-      setFilteredTests(tests);
-    } else {
-      const filteredSubTitle = tests.filter((test) =>
-        test.sub_title.toLowerCase().startsWith(searchSubTitle.toLowerCase())
-      );
-      setFilteredTests(filteredSubTitle);
-    }
-  };
-
   useEffect(() => {
+    setLimit(numTestsPerPage);
     filterTests();
-  }, [searchColor, tests]);
-
-  useEffect(() => {
-    filterTestsByTitle();
-  }, [searchTitle, tests]);
-
-  useEffect(() => {
-    filterTestsBySubtitle();
-  }, [searchSubTitle, tests]);
+  }, [searchColor, searchTitle, searchSubTitle, tests, numTestsPerPage]);
 
   const handleLanguageChange = (event) => {
     setSelectedLanguage(event.target.value);
@@ -113,14 +92,12 @@ const Main = () => {
 
   const handlePageChange = (newPage) => {
     if (newPage > 0) {
-      // Vérification pour que la pagination ne descende pas en dessous de 1
       setPage(newPage);
     }
   };
 
   const handleUpdate = (id) => {
-    // console.log('Modifier le test avec l\'ID :', id);
-    setSelectedTestId(id); // Stocke ID du test sélectionné
+    setSelectedTestId(id);
     setIsModalOpen(true);
   };
 
@@ -131,9 +108,8 @@ const Main = () => {
           Authorization: token,
         },
       });
-
       setTests(tests.filter((test) => test.id !== id));
-
+      toast.success("Test supprimé");
       console.log(response);
     } catch (error) {
       console.error("Error fetching tests:", error);
@@ -151,6 +127,14 @@ const Main = () => {
   const handleSubTitleChange = (event) => {
     setSearchSubTitle(event.target.value);
   };
+
+  const handleNumTestsPerPageChange = (event) => {
+    const numPerPage = parseInt(event.target.value);
+    if (!isNaN(numPerPage) && numPerPage > 0) {
+      setNumTestsPerPage(numPerPage);
+    }
+  };
+
   return (
     <div className="main">
       <div className="main__language">
@@ -171,7 +155,7 @@ const Main = () => {
           <div className="search-bar__research__color">
             <input
               type="text"
-              placeholder="Rechercher par couleur..."
+              placeholder="Rechercher couleur (ex:#ff00ff)"
               value={searchColor}
               onChange={handleColorChange}
             />
@@ -194,6 +178,19 @@ const Main = () => {
               onChange={handleSubTitleChange}
             />
           </div>
+        </div>
+      </div>
+
+      <div className="main__num">
+        <div className="main__num-tests-per-page">
+          <label htmlFor="numTestsPerPage">Nombre de tests par page :</label>
+          <input
+            type="number"
+            id="numTestsPerPage"
+            min="1"
+            value={numTestsPerPage}
+            onChange={handleNumTestsPerPageChange}
+          />
         </div>
       </div>
 
@@ -250,11 +247,11 @@ const Main = () => {
       </div>
       <div className="pagination">
         <button onClick={() => handlePageChange(page - 1)} className="button">
-          Previous
+          Précédent
         </button>
         <span className="pagination__number">{page}</span>
         <button onClick={() => handlePageChange(page + 1)} className="button">
-          Next
+          Suivant
         </button>
       </div>
       {isModalOpen && (

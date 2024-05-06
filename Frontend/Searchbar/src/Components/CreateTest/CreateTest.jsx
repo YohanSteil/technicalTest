@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "./CreateTest.scss";
+import toast from "react-hot-toast";
 axios.defaults.baseURL = "http://localhost:3000/";
 
 const CreateTest = () => {
@@ -48,7 +49,26 @@ const CreateTest = () => {
     try {
       const tokenResponse = await fetchToken();
       const token = tokenResponse.data.token;
-      //   console.log(token);
+      const colorRegex = /^#[0-9A-F]{6}$/i;
+
+      if (
+        !formData.title_en ||
+        !formData.title_fr ||
+        !formData.sub_title_fr ||
+        !formData.sub_title_en ||
+        !formData.color ||
+        !formData.is_active
+      ) {
+        toast.error("Tous les champs doivent être remplis");
+        return; // Arrête l'exécution de la fonction si des champs sont vides
+      }
+
+      if (!colorRegex.test(formData.color)) {
+        toast.error(
+          "La couleur doit être rentrée sous le format hexadécimal : #xxxxxx"
+        );
+        return;
+      }
 
       const testData = {
         title: {
@@ -70,7 +90,7 @@ const CreateTest = () => {
           Authorization: token,
         },
       });
-      //   console.log(response);
+      console.log(response);
       setFormData({
         title_en: "",
         title_fr: "",

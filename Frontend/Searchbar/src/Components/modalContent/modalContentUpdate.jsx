@@ -1,6 +1,7 @@
 // ModalContent.jsx
 import React, { useState } from "react";
 import axios from "axios";
+import toast from "react-hot-toast";
 axios.defaults.baseURL = "http://localhost:3000/";
 
 const ModalContent = ({ testId, handleCloseModal }) => {
@@ -36,9 +37,20 @@ const ModalContent = ({ testId, handleCloseModal }) => {
   const handleSubmit = async () => {
     try {
       const tokenResponse = await fetchToken();
-
-      // Extraire le token de la réponse
       const token = tokenResponse.data.token;
+
+      if (
+        !formData.title_en ||
+        !formData.title_fr ||
+        !formData.sub_title_fr ||
+        !formData.sub_title_en ||
+        !formData.color ||
+        !formData.is_active
+      ) {
+        toast.error("ERREUR : Tous les champs doivent être remplis");
+        return; // Arrête l'exécution de la fonction si des champs sont vides
+      }
+
       const formDataToSend = {
         title: {
           en: formData.title_en,
@@ -63,6 +75,7 @@ const ModalContent = ({ testId, handleCloseModal }) => {
         }
       );
       console.log(response);
+      toast.success("Test modifié");
       // Réinitialise le formulaire après l'envoi des données
       setFormData({
         title_en: "",
@@ -72,6 +85,7 @@ const ModalContent = ({ testId, handleCloseModal }) => {
         color: "",
         is_active: "",
       });
+
       handleCloseModal();
     } catch (error) {
       console.error("Erreur lors de l'envoi des données :", error);

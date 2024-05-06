@@ -1,10 +1,19 @@
 .header {
-   
+   display: flex;
+   flex-direction: row;
+   align-items: center;
+   border-bottom: 1px solid lightgray;
+   padding-bottom: 2rem;
 
     &__title{
+        padding-left: 31rem;
         font-size: 3rem;
         text-align: center;
         font-weight: bold;
         color: black;
+    }
+
+    &__img{
+        padding-left: 3rem;
     }
 }
